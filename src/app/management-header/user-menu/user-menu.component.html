@@ -1,0 +1,11 @@
+<div ngbDropdown class="d-inline-block user-menu" placement="bottom-right" display="dynamic">
+    <a id="dropdownUserMenu" ngbDropdownToggle >
+      <span id="user-icon-img-url" class=" img-optimize-contrast cursor-pointer "></span>
+    </a>
+    <div ngbDropdownMenu aria-labelledby="dropdownUserMenu" class="cursor-pointer">
+        <div class="dropdown-menu-username">{{userFullName}}</div>
+        <a class="dropdown-item" (click)="logout()">
+          Sign Off
+      </a>
+    </div>
+</div>

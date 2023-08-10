@@ -1,0 +1,13 @@
+<div ngbDropdown class="d-inline-block user-menu" placement="bottom-right" display="dynamic">
+        <a id="dropdownUserMenu" ngbDropdownToggle>
+          <span id="user-icon-img-url" class="img-optimize-contrast cursor-pointer "></span>
+        </a>
+        <div ngbDropdownMenu aria-labelledby="dropdownUserMenu" class="cursor-pointer">
+          <ng-container>
+            <a class="dropdown-item" *ngFor="let app of apps" href="{{ app.url }}">
+                <img *ngIf="app.icons" class="img-apps" src="{{ app.icons }}" />
+                {{ app.name }}
+            </a>
+            </ng-container>
+        </div>
+</div>

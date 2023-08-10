@@ -1,0 +1,16 @@
+<div ngbDropdown class="d-inline-block user-menu" placement="bottom-right" display="dynamic">
+  <a id="dropdownUserMenu" ngbDropdownToggle >
+    <span id="user-icon-img-url" class="img-optimize-contrast cursor-pointer " ></span>
+  </a>
+  <div ngbDropdownMenu aria-labelledby="dropdownUserMenu" class="cursor-pointer">
+    <a class="dropdown-item " href="https://mail.google.com/mail/?view=cm&fs=1&to=QTAnalytics@quotient.com&su=Announcement Centre Support">
+      <img class="img-apps img-optimize-contrast" src="assets/images/icons/contact-support.png"/>  
+      Contact Support
+    </a>
+    <a class="dropdown-item " (click)="goToLink()" >
+      <img class="img-apps img-optimize-contrast" src="assets/images/icons/help_center_icon.png"/>
+      Help Center
+    </a>
+  </div>
+
+</div>

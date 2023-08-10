@@ -1,0 +1,57 @@
+#Navbar {
+    height: 75px;
+    background-color: #24353e;
+    /* width: 100%; */
+    margin: auto;
+    display: block;
+    position: fixed;
+  
+  }
+  .navbar {
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 100px;
+    border: 1px solid transparent;
+  }
+  
+  .navbar-inverse {
+    background-color: #38434b;
+    border-color: #38434b;
+  }
+  .navbar-fixed-top {
+    top: 0;
+    border-width: 0 0 1px;
+  }
+  
+  .navbar-fixed-top, .navbar-fixed-bottom {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    padding-left: 34px;
+    padding-top: 24px;
+    padding-bottom: 23px;
+    padding-right: 28px;
+  }
+  
+  .q-announcement-Logo {
+    width: 329px;
+    height: 30px;
+    object-fit: contain;
+    margin-left:-55px;
+    /* float: left; */
+  }
+  
+  .pull-right{
+    float: right !important;
+  }
+  
+  .list-inline{
+    padding-left: 0;
+  list-style: none;
+  }
+  
+  .list-inline-item{
+    display: inline-block;
+    padding-left: 15px;
+  }
