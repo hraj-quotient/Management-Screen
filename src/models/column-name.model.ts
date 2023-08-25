@@ -3,11 +3,13 @@ export interface UserData {
   name: string;
   email: string;
   gender: string;
-  options: string[]
+  options: string[],
+  active: boolean
   }
 
   export interface filterFields{
     nameFilter: string;
     emailFilter: string;
     genderFilter:string;
+    activeFilter: string;
 }

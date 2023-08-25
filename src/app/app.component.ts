@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/services/ApiCalls/apiCalls.service';
-import { ColumnsName, Options, PageSizeOptions } from 'src/models/enums.model';
+import {LibSettings} from 'src/models/enums.model';
 import { filterFields, UserData } from 'src/models/column-name.model';
 @Component({
   selector: 'app-root',
@@ -13,44 +13,39 @@ export class AppComponent implements OnInit{
   constructor(private _apiService: ApiService,){}
 
   transformedData:any;
-
-  filterAllFlag!:true;
-
-  option:any=['Clone','Edit','Delete'];   //change
-  
-  options=[Options.Clone,
-           Options.Edit,
-           Options.Delete];
-           
-  // displayedColumns= [Columns.Id,
-  //   Columns.Name,
-  //   Columns.Email,
-  //   Columns.Gender];
-
-  displayedColumnsName=[ColumnsName.col1,
-  ColumnsName.col2,
-  ColumnsName.col3,
-  ColumnsName.col4,
-  ColumnsName.col5];
-
-  pageSizes=[PageSizeOptions.page1,
-  PageSizeOptions.page2,
-  PageSizeOptions.page3];
-
-
-  tableColumns = [
+  recievedOptionData:any;
+  settings: LibSettings=new LibSettings();
+  columnFilterSetting=[true,true,true,false];
+  filterAllSetting=false;
+  optionSetting=['Clone','Edit','Delete'];  
+  pageSizesSetting=[10,20,50];
+  tableColumnSetting = [
     { key: 'col1', header: 'ID' },
     { key: 'col2', header: 'Name' },
     { key: 'col3', header: 'Email Id' },
     { key: 'col4', header: 'Gender' },
-    { key: 'rowOptions', header: 'Options' }
+    // { key: 'col5', header: 'activeStatus' },
+    { key: 'rowOptions', header: null },
   ];
-
+  sortSetting={
+    id: 'col2',
+    start:'asc',
+    disableClear: true
+  }
 
   ngOnInit() {
       this._apiService.getData().subscribe(res=>{
         this.transformedData= this.transformApiResponse(res);
+        this.settings.data=this.transformedData;
      })
+
+          this.settings.columnFilter = this.columnFilterSetting;
+          this.settings.option = this.optionSetting;
+          this.settings.pageSizes = this.pageSizesSetting;
+          this.settings.sort = this.sortSetting;
+          this.settings.tableColumn=this.tableColumnSetting;
+
+
     
   }
 
@@ -61,10 +56,31 @@ export class AppComponent implements OnInit{
         col2: item.name,
         col3: item.email,
         col4: item.gender,
-        rowOptions: this.option,
+        rowOptions: this.optionSetting,
+        // col5: item.active
       };
     });
   }
+
+  handleObject(value: any) {
+    this.recievedOptionData=value;
+    // if(value.option=='Delete'){
+    //   for(let i=0;i<this.transformedData.length;i++){
+    //     if(this.transformedData[i].col1== value.row.col1){
+    //       this.transformedData[i].col2="Update";
+    //     }
+    //   }
+
+    // }
+    console.log(value);
+  }
+
+
+
+  
+
+
+ 
 }
 
 

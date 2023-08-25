@@ -1,9 +1,10 @@
 <body class="bg">
     <app-management-header></app-management-header>
     <!-- <app-management-component></app-management-component> -->
-  <div *ngIf="transformedData && options && tableColumns && displayedColumnsName && pageSizes">
-    <lib-quot-data-table [data]="transformedData" [enumOption]="options" [enumColumn]="tableColumns" [enumColumnNames]="displayedColumnsName" 
-    [enumPageSizeOptions]="pageSizes"></lib-quot-data-table>
+  <div *ngIf="transformedData">
+    <lib-quot-data-table [object]="settings"  (outEmit)="handleObject($event)"></lib-quot-data-table>
+  </div>
+  <div>
   </div>
     <router-outlet></router-outlet>
 </body>

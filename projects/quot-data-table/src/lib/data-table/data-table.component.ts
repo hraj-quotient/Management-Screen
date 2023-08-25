@@ -1,8 +1,8 @@
-import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { TableColumn, UserData } from '../../models/column-name-lib.model';
+import { TableColumn } from '../../models_lib/column-name-lib.model';
 
 @Component({
   selector: 'lib-data-table',
@@ -10,108 +10,94 @@ import { TableColumn, UserData } from '../../models/column-name-lib.model';
   styleUrls: ['./data-table.component.css']
 })
 export class DataTableComponent {
-  @Input() apiData: any;
-  @Input() option:any;
-  @Input() column: TableColumn[]=[];
-  @Input() columnNames:any;
-  @Input() pageSizeOptions:any;
+  
+@Input() settingObject:any;
+@Output() outputEmitter:EventEmitter<{option: string, row:any}> =new EventEmitter();
+  
+  
 
 pageNumber!: number;
-dataSource: MatTableDataSource<UserData> = new MatTableDataSource<UserData>([]);
-column2: string = '';
-column3: string = '';
-column4:string='';
+dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
 options:any;
-maps = new Map<string, string>();
-pageSize:number=10;
+column: TableColumn[]=[];
+pageSizeOptions:any;
+flagForFilters:any;
+sortData:any;
+optionSelected:any;
+rowSelected:any;
 
 
 
 @ViewChild(MatPaginator, {static:true}) paginator!: MatPaginator;
 @ViewChild(MatSort) sort!: MatSort;
 
+constructor(){
+  this.dataSource.filterPredicate = this.customFilterPredicate();
+}
+
 
 ngOnInit(){
-this.dataSource.data=this.apiData;
-this.options=this.option;
-this.maps.set("col1",this.columnNames[0]);
-this.maps.set("col2",this.columnNames[1]);
-this.maps.set("col3",this.columnNames[2]);
-this.maps.set("col4",this.columnNames[3]);
+this.dataSource.data=this.settingObject.data;
+this.column=this.settingObject.tableColumn;
+this.pageSizeOptions=this.settingObject.pageSizes;
+this.sortData=this.settingObject.sort;
+this.flagForFilters=this.settingObject.columnFilter;
 
-console.log(JSON.stringify(this.dataSource.data));
-
+this.emitOut();
 }
 
 
 ngAfterViewInit() {
 this.dataSource.sort = this.sort;
+this.sort.sort({id: this.sortData.id, start: this.sortData.start, disableClear: this.sortData.disableClear});
 this.dataSource.paginator = this.paginator;
 }
 
 ngOnchange(changes: SimpleChanges){
 if(this.dataSource){  
 this.dataSource.paginator = this.paginator;
-this.paginator.pageSize = 10; //change
+this.paginator.pageSize = this.pageSizeOptions[0]; //change
 }
 }
 
-applyFilterOnAll(event: Event) {
-const filterValue = (event.target as HTMLInputElement).value;
-this.dataSource.filter = filterValue.trim().toLowerCase();
-
-if (this.dataSource.paginator) {
-this.dataSource.paginator.firstPage();
-}
+applyFilter( filterValue: string, columnKey?: string): void {
+  this.dataSource.filter = JSON.stringify({ columnKey, filterValue });
 }
 
-applyFilter(filterBy?: any) {
-
-switch (filterBy) {
-case 'col2':
-this.dataSource.filterPredicate = (data, filter) =>
-data.col2.toLowerCase().includes(filter);
-this.dataSource.filter = this.column2.toLowerCase();
-break;
-
-case 'col3':
-this.dataSource.filterPredicate = (data, filter) =>
-data.col3.toLowerCase().includes(filter);
-this.dataSource.filter = this.column3.toLowerCase();
-break;
-
-case 'col4':
-this.dataSource.filterPredicate = (data, filter) =>
-data.col4.toLowerCase().includes(filter);
-this.dataSource.filter = this.column4.toLowerCase();
-break;
-
-}
+customFilterPredicate(): (data: any, filter: string) => boolean {
+  const filterData = (data: any, filter: string): boolean => {
+    const searchTerms = JSON.parse(filter);
+    return data[searchTerms.columnKey]
+      .toString()
+      .toLowerCase()
+      .includes(searchTerms.filterValue.toLowerCase());
+  };
+  return filterData;
 }
 
-goToPage() {
-this.paginator.pageIndex = this.pageNumber - 1;
-this.paginator.page.next({
-pageIndex: this.paginator.pageIndex,
-pageSize: this.paginator.pageSize,
-length: this.paginator.length
-});
-}
-onOptionClick(option: string, row: UserData) {
-console.log('Option clicked:', option, 'for row:', row);
+// goToPage() {
+// this.paginator.pageIndex = this.pageNumber - 1;
+// this.paginator.page.next({
+// pageIndex: this.paginator.pageIndex,
+// pageSize: this.paginator.pageSize,
+// length: this.paginator.length
+// });
+// }
+
+onOptionClick(option: string, row: any) {
+  this.rowSelected=row;
+  this.optionSelected=option;
+  this.outputEmitter.emit({option,row});
 }
 
-getValueByKey(key: string){
-  return this.maps.get(key);
+emitOut(){
+ this.onOptionClick(this.optionSelected,this.rowSelected);
 }
+
 
 getColumnKeys(): string[] {
   return this.column.map((column: any) => column.key);
 }
 
-getColumnHeader(key: string): string {
-  const val = this.column.find((col:any) => col.key === key);
-  return val ? val.header : '';
-}
 
 }

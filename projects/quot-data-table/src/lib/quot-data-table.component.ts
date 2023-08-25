@@ -1,18 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'lib-quot-data-table',
   template: `
-    <lib-data-table [apiData]="data" [option]="enumOption" [column]="enumColumn" [columnNames]="enumColumnNames" [pageSizeOptions]="enumPageSizeOptions"></lib-data-table>
+    <lib-data-table [settingObject]="object" (outputEmitter)="handleEmitOut($event)"></lib-data-table>
   `,
   styles: [
   ]
 })
-export class QuotDataTableComponent {
+export class QuotDataTableComponent{
 
-  @Input() data:any;
-  @Input() enumOption:any;
-  @Input() enumColumn:any;
-  @Input() enumColumnNames:any;
-  @Input() enumPageSizeOptions:any;
+
+  @Input() object:any;
+  @Output() outEmit: EventEmitter<any> = new EventEmitter<string>();
+
+  handleEmitOut(value: string) {
+    this.outEmit.emit(value);
+  }
+  
 }
